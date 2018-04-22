@@ -1,10 +1,12 @@
 from django.shortcuts import get_object_or_404, render
+from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
 
 from .models import Choice, Question
+from .forms import UsersForm
 
 # Create your views here.
 
@@ -48,3 +50,23 @@ def vote(request, question_id):
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
         return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+
+def user_new(request, template='polls/user_new.html'):
+    if request.method == 'POST':
+        form = UsersForm(request.POST)
+        if form.is_valid():
+            # Unpack form values
+            password = form.cleaned_data['password1']
+            email = form.cleaned_data['email']
+            # Create the User record
+            user = User(email=email)
+            user.set_password(password)
+            user.save()
+            # Create Subscriber Record
+            # Process payment (via Stripe)
+            # Auto login the user
+            return HttpResponseRedirect('/success/')
+    else:
+        form = UsersForm()
+
+    return render(request, template, {'form':form})

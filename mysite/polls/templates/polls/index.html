@@ -5,8 +5,9 @@
 {% if latest_question_list %}
     <ul>
     {% for question in latest_question_list %}
-        <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li>
+        <li><h2><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></h2></li>
     {% endfor %}
+	    <li><h2><a href="{% url 'polls:u_new' %}" class="p-r-none">Sign Up!</a></h2></li>
     </ul>
 {% else %}
     <p>No polls are available.</p>
