@@ -1,7 +1,6 @@
 import datetime
 from django.db import models
 from django.utils import timezone
-from django.contrib.auth.models import User
 
 # Create your models here.
 class Question(models.Model):
@@ -23,13 +22,10 @@ class Choice(models.Model):
     def __str__(self):
         return self.choice_text
 
-class PUser(models.Model):
-    user_rec = models.ForeignKey(User, on_delete=models.CASCADE)
+class PollUser(models.Model):
+    email = models.CharField(max_length=200)
+    username = models.CharField(max_length=50)
     city = models.CharField(max_length=50)
 
-
-    class Meta:
-        verbose_name_plural = 'users'
-        
-    def __unicode__(self):
-        return u"%s's User Info" % self.user_rec
+    def __str__(self):
+        return self.username
