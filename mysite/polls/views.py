@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
 
-from .models import Choice, Question
+from .models import Choice, Question, PUser
 from .forms import UsersForm
 
 # Create your views here.
@@ -51,20 +51,19 @@ def vote(request, question_id):
         # user hits the Back button.
         return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
 
-def user_new(request, template='polls/user_new.html'):
-    if request.method == 'POST':
+def u_new(request, template='polls/user_new.html'):
+    if  request.method == 'POST':
         form = UsersForm(request.POST)
         if form.is_valid():
             # Unpack form values
+            username = form.cleaned_data['username']
             password = form.cleaned_data['password1']
             email = form.cleaned_data['email']
             # Create the User record
-            user = User(email=email)
+            user = User(username=username, email=email)
             user.set_password(password)
             user.save()
             # Create Subscriber Record
-            # Process payment (via Stripe)
-            # Auto login the user
             return HttpResponseRedirect('/success/')
     else:
         form = UsersForm()
